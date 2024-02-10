@@ -11,7 +11,7 @@ function Playground() {
   return (
     <>
       <div>playground</div>
-      
+      <br />
 
       <div className="bg-white shadow rounded h-screen">
         {/* Resizable panels container */}

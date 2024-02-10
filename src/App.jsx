@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Playground from './pages/playground/playground'
 import './App.css'
+import Query from './pages/query/Query';
 
 function App() {
   const Layout = () => {
@@ -24,6 +25,10 @@ function App() {
           path: "/",
           element: <Playground />,
         },
+        {
+          path:"/query",
+          element: <Query/>,
+        }
         
       ],
     },

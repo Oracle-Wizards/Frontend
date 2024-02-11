@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-irregular-whitespace */
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";

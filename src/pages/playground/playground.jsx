@@ -35,7 +35,9 @@ function Playground() {
                 <Button>Submit</Button>
               </div>
             </ResizablePanel>
+
             <ResizableHandle />
+            
             <ResizablePanel className="flex-grow">
               {/* Nested ResizablePanelGroup */}
               <ResizablePanelGroup direction="vertical" className="flex flex-grow">

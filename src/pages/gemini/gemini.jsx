@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/resizable";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { sql } from 'react-syntax-highlighter/dist/esm/languages/hljs'; // Importez le langage SQL
-
+import  './gemini.css';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 function DisplaySql(props) {
@@ -81,13 +82,26 @@ const formatExplanation = (explanation) => {
       console.error('Error fetching data:', error);
     }
   };
+  
 
   return (
     <>
-      <div>Gemini</div>
-      <br />
-
-      <div className="bg-white shadow rounded h-screen">
+     <div className="flex flex-col items-center ">
+        <div className="flex flex-row">
+          <Avatar>
+            <AvatarImage src="https://www.gstatic.com/lamda/images/bard_sparkle_v2.svg" alt="Gemini" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <div className="Hello  font-bold text-4xl">
+            Hello, I'm Gemini.
+          </div>
+        </div>
+        <div className="qts  font-bold text-3xl what">
+          What can I do for you today?
+        </div>
+      </div>
+      {/* <br/> */}
+      <div className="bg-white shadow rounded ashraf">
         {/* Resizable panels container */}
         <div className="flex flex-col h-full">
           <ResizablePanelGroup direction="horizontal" className="flex flex-grow">

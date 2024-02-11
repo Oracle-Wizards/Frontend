@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from '@/components/ui/textarea';
@@ -92,12 +93,12 @@ const formatExplanation = (explanation) => {
             <AvatarImage src="https://www.gstatic.com/lamda/images/bard_sparkle_v2.svg" alt="Gemini" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <div className="Hello  font-bold text-4xl">
-            Hello, I'm Gemini.
+          <div className="title1  font-bold text-3xl what2">
+            Hello, I'm Query Wizard :
           </div>
         </div>
-        <div className="qts  font-bold text-3xl what">
-          What can I do for you today?
+        <div className="qts  font-bold text-2xl what">
+        input text, get query, see magic 🪄
         </div>
       </div>
       {/* <br/> */}

@@ -1,7 +1,14 @@
-.Hello{
+.title1{
 
     background: #1D95CF;
     background: linear-gradient(to right, #1D95CF 3%, #CF4946 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+}
+.title2{
+    background: #1D95CF;
+    background: linear-gradient(to top left, #1D95CF 3%, #CFCFCF 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     
@@ -18,4 +25,7 @@
 }
 .what{
     padding-bottom: 1%;
+}
+.what2{
+    padding-bottom: 2%;
 }

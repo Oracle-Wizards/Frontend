@@ -99,11 +99,11 @@ const formatExplanation = (explanation) => {
           </div>
         </div>
         <div className="qts  font-bold text-2xl what">
-        input text, get query, see magic 🪄
+        input text, get query, see magic 🪄
         </div>
       </div>
       {/* <br/> */}
-      <div className="bg-white shadow rounded ashraf">
+      <div className="bg-gray-100 shadow-lg rounded ashraf">
         {/* Resizable panels container */}
         <div className="flex flex-col h-full">
           <ResizablePanelGroup direction="horizontal" className="flex flex-grow">
@@ -111,8 +111,9 @@ const formatExplanation = (explanation) => {
               <div className="flex flex-col h-full items-center justify-center p-6">
                 <span className="font-semibold text-xl">Original Text </span>
                 <Textarea
-                  className="mt-4 resize-none w-full flex-grow text-lg"
+                  className="mt-4 resize-none w-full flex-grow text-lg bg-gray-150"
                   value={originalText}
+                  placeholder="Type your text here."
                   onChange={(e) => setOriginalText(e.target.value)}
                 />
               </div>
@@ -127,7 +128,7 @@ const formatExplanation = (explanation) => {
                     <div className="flex flex-col h-full items-center justify-center p-6">
                       <span className="font-semibold text-xl">Query</span>
                       <Textarea
-                        className="mt-4 resize-none w-full flex-grow text-base"
+                        className="mt-4 resize-none w-full flex-grow text-base bg-gray-150"
                         value={generatedQuery}
                         readOnly
                       />
@@ -141,9 +142,9 @@ const formatExplanation = (explanation) => {
 
                   <ResizablePanel className="flex-grow" defaultSize={60}>
                     <div className="flex flex-col h-full items-center justify-center p-6">
-                      <span className="font-semibold text-xl">Query Explication</span>
+                      <span className="font-semibold text-xl">Query Explanation</span>
                       <Textarea
-                        className="mt-4 resize-none w-full flex-grow text-base"
+                        className="mt-4 resize-none w-full flex-grow text-base bg-gray-150"
                         value={queryExplanation} 
                         readOnly
                       />

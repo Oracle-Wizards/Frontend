@@ -53,10 +53,13 @@ const formatExplanation = (explanation) => {
 
   // Remplacer \n par un retour à la ligne
   explanation = explanation.replace(/\\n/g, '\n');
+  explanation = explanation.replace(/\\n{2,}/g, '\n');
+
   // Supprimer les guillemets doubles
   explanation = explanation.replace(/"/g, '');
   explanation = explanation.replace(/'/g, '');
-  explanation = explanation.replace(/`/g, '');
+  explanation = explanation.replace(/```/g, '');
+  explanation = explanation.replace(/``/g, '');
   
   return explanation;
 };
@@ -88,11 +91,11 @@ const formatExplanation = (explanation) => {
         {/* Resizable panels container */}
         <div className="flex flex-col h-full">
           <ResizablePanelGroup direction="horizontal" className="flex flex-grow">
-            <ResizablePanel className="border-r flex-grow">
+            <ResizablePanel className="border-r flex-grow" defaultSize={50}>
               <div className="flex flex-col h-full items-center justify-center p-6">
-                <span className="font-semibold">Original Text </span>
+                <span className="font-semibold text-xl">Original Text </span>
                 <Textarea
-                  className="mt-4 resize-none w-full flex-grow"
+                  className="mt-4 resize-none w-full flex-grow text-lg"
                   value={originalText}
                   onChange={(e) => setOriginalText(e.target.value)}
                 />
@@ -100,15 +103,15 @@ const formatExplanation = (explanation) => {
             </ResizablePanel>
 
             <ResizableHandle />
-            
-            <ResizablePanel className="flex-grow">
 
-              <ResizablePanelGroup direction="vertical" className="flex flex-grow">
-                  <ResizablePanel className="border-r flex-grow">
+            <ResizablePanel className="flex-grow" defaultSize={50}>
+
+                <ResizablePanelGroup direction="vertical" className="flex flex-grow">
+                  <ResizablePanel className="flex-grow" defaultSize={40}>
                     <div className="flex flex-col h-full items-center justify-center p-6">
-                      <span className="font-semibold">Query</span>
+                      <span className="font-semibold text-xl">Query</span>
                       <Textarea
-                        className="mt-4 resize-none w-full flex-grow"
+                        className="mt-4 resize-none w-full flex-grow text-base"
                         value={generatedQuery}
                         readOnly
                       />
@@ -120,11 +123,11 @@ const formatExplanation = (explanation) => {
                   
                   <ResizableHandle />
 
-                  <ResizablePanel className="flex-grow">
+                  <ResizablePanel className="flex-grow" defaultSize={60}>
                     <div className="flex flex-col h-full items-center justify-center p-6">
-                      <span className="font-semibold">Query Explication</span>
+                      <span className="font-semibold text-xl">Query Explication</span>
                       <Textarea
-                        className="mt-4 resize-none w-full flex-grow"
+                        className="mt-4 resize-none w-full flex-grow text-base"
                         value={queryExplanation} 
                         readOnly
                       />

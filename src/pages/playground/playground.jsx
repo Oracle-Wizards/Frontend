@@ -1,4 +1,4 @@
-import React from 'react';
+/* eslint-disable react/no-unescaped-entities */
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -37,7 +37,7 @@ function Playground() {
             </ResizablePanel>
 
             <ResizableHandle />
-            
+
             <ResizablePanel className="flex-grow">
               {/* Nested ResizablePanelGroup */}
               <ResizablePanelGroup direction="vertical" className="flex flex-grow">
@@ -76,12 +76,15 @@ function Playground() {
                     </Table>
                   </div>
                 </ResizablePanel>
+
                 <ResizableHandle />
+
                 <ResizablePanel className="flex-grow">
                   <div className="flex h-full items-center justify-center p-6">
                     <span className="font-semibold">Optimized Query</span>
                   </div>
                 </ResizablePanel>
+                
               </ResizablePanelGroup>
             </ResizablePanel>
           </ResizablePanelGroup>

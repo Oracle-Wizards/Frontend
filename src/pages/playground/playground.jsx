@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 function Playground() {
   return (
     <>
-      <div>playground</div>
+      <div></div>
       
 
       <div className="bg-white shadow rounded h-screen">
@@ -19,8 +19,10 @@ function Playground() {
           <ResizablePanelGroup direction="horizontal" className="flex flex-grow">
             <ResizablePanel className="border-r flex-grow">
               <div className="flex h-full items-center justify-center p-6">
-                <span className="font-semibold">One</span>
-                <Textarea className="mt-4">This is the content of Panel One.</Textarea>
+                <Textarea placeholder="Type your message here." style={{ width: '400px' }} />
+                <Button
+                    style={{ width: '400px' }}
+                >Send message</Button>
               </div>
             </ResizablePanel>
             <ResizableHandle />

@@ -3,15 +3,18 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Playground from './pages/playground/playground'
 import Gemini from './pages/gemini/gemini'
 import './App.css'
+import Query from './pages/query/Query';
+import { ChakraProvider } from '@chakra-ui/react'
+import Home from './pages/home/Home';
 
 function App() {
   const Layout = () => {
     return (
-      //<div className="app">
-          // <Navbar />
+      <ChakraProvider>
+    
           <Outlet />
-          // <Footer />
-      //</div>
+        
+      </ChakraProvider>
   ) ;
   };
 
@@ -22,17 +25,23 @@ function App() {
       element: <Layout />,
       children: [
         {
-          path: "/",
+          path: "/playground",
           element: <Playground />,//from Playgroud to homepage "a changer" 🙂🪄
         },
+         
         {
-          path: "/Playground",
-          element: <Playground />,
+          path:"/query",
+          element: <Query/>,
         },
         {
+          path:"/",
+          element: <Home/>,
+        },{
+          
           path: "/ChatBot",
           element: <Gemini />,
-        },
+        }
+        
         
       ],
     },

@@ -99,7 +99,7 @@ function Playground() {
                     <span className="font-semibold">Optimized Query</span>
                   </div> */}
                   <div className="flex flex-col h-full items-center justify-center p-6">
-                      <span className="font-semibold text-xl">Optimized Quer</span>
+                      <span className="font-semibold text-xl">Optimized Query</span>
                       <Textarea
                         className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
                         value={""}

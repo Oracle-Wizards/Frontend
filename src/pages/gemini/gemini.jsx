@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-irregular-whitespace */
-import React, { useState } from 'react';
+import   { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -15,6 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { Spinner } from '@chakra-ui/react'
+import loadingGif  from './loading.gif';
 
 
 function DisplaySql(props) {
@@ -48,6 +50,7 @@ function Gemini() {
   const [originalText, setOriginalText] = useState('');
   const [generatedQuery, setGeneratedQuery] = useState('');
   const [queryExplanation, setQueryExplanation] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Fonction pour formater l'explication
 const formatExplanation = (explanation) => {
@@ -71,6 +74,7 @@ const formatExplanation = (explanation) => {
 };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`http://localhost:5000/generate`, { 
         method: 'POST',
@@ -85,6 +89,9 @@ const formatExplanation = (explanation) => {
       setQueryExplanation(formatExplanation(data.explanation));
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      
+      setLoading(false);
     }
   };
   
@@ -130,11 +137,19 @@ const formatExplanation = (explanation) => {
                   <ResizablePanel className="flex-grow" defaultSize={40}>
                     <div className="flex flex-col h-full items-center justify-center p-6">
                       <span className="font-semibold text-xl">Query</span>
-                      <Textarea
-                        className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
-                        value={generatedQuery}
-                        readOnly
-                      />
+                      {loading ?  
+                        ( <>
+                            <br />
+                            <img src={loadingGif} alt="Loading..."  style={{ width: '50px', height: '50px' }}/>
+
+                            {/* <Spinner/> */}
+                          </>
+                        ):(<>
+                        <Textarea
+                          className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
+                          value={generatedQuery}
+                          readOnly
+                        />
                        {/* <CopyToClipboard text={generatedQuery}>
                       <button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Copy Query</button>
                     </CopyToClipboard> */}
@@ -148,10 +163,12 @@ const formatExplanation = (explanation) => {
                      </Button>
                    </CopyToClipboard>
                     )}
-
+                    
                       {/* <div className="App">
                         <DisplaySql sqlQuery={generatedQuery} />
                       </div> */}
+                      </>
+                      )}
                     </div>
                   </ResizablePanel>
                   
@@ -160,11 +177,22 @@ const formatExplanation = (explanation) => {
                   <ResizablePanel className="flex-grow" defaultSize={60}>
                     <div className="flex flex-col h-full items-center justify-center p-6">
                       <span className="font-semibold text-xl">Query Explanation</span>
-                      <Textarea
-                        className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
-                        value={queryExplanation} 
-                        readOnly
-                      />
+                      {loading ? 
+                        ( <>
+                            <br />
+                            <img src={loadingGif} alt="Loading..."  style={{ width: '50px', height: '50px' }}/>
+                          </>
+                        ):(
+                          <>
+                            <Textarea
+                              className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
+                              value={queryExplanation} 
+                              readOnly
+                            />
+                          </>
+                        )
+                      }
+
                     </div>
                   </ResizablePanel>
 

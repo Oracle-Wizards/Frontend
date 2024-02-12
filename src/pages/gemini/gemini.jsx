@@ -12,6 +12,9 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { sql } from 'react-syntax-highlighter/dist/esm/languages/hljs'; // Importez le langage SQL
 import  './gemini.css';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
 
 function DisplaySql(props) {
@@ -132,6 +135,20 @@ const formatExplanation = (explanation) => {
                         value={generatedQuery}
                         readOnly
                       />
+                       {/* <CopyToClipboard text={generatedQuery}>
+                      <button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Copy Query</button>
+                    </CopyToClipboard> */}
+
+                    
+                    {generatedQuery && (
+                      <CopyToClipboard text={generatedQuery}>
+                      <Button className="mt-2  py-2 px-4  rounded-lg" variant="outline" >
+                       <FontAwesomeIcon icon={faCopy} className="mr-2" />
+                       Copy Query
+                     </Button>
+                   </CopyToClipboard>
+                    )}
+
                       {/* <div className="App">
                         <DisplaySql sqlQuery={generatedQuery} />
                       </div> */}

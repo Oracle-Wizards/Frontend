@@ -23,6 +23,10 @@ function App() {
       children: [
         {
           path: "/",
+          element: <Playground />,//from Playgroud to homepage "a changer" 🙂🪄
+        },
+        {
+          path: "/Playground",
           element: <Playground />,
         },
         {

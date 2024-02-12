@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Playground from './pages/playground/playground'
+import Gemini from './pages/gemini/gemini'
 import './App.css'
 import Query from './pages/query/Query';
 import { ChakraProvider } from '@chakra-ui/react'
@@ -25,6 +26,10 @@ function App() {
       children: [
         {
           path: "/",
+          element: <Playground />,//from Playgroud to homepage "a changer" 🙂🪄
+        },
+        {
+          path: "/Playground",
           element: <Playground />,
         },
         {
@@ -34,7 +39,12 @@ function App() {
         {
           path:"/home",
           element: <Home/>,
+        },{
+          
+          path: "/ChatBot",
+          element: <Gemini />,
         }
+        
         
       ],
     },

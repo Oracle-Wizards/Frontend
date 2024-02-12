@@ -26,7 +26,7 @@ function App() {
           element: <Playground />,
         },
         {
-          path: "/Gemini",
+          path: "/ChatBot",
           element: <Gemini />,
         },
         

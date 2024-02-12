@@ -1,5 +1,13 @@
-import React from 'react'
-import { Button } from "@/components/ui/button"
+/* eslint-disable react/no-unescaped-entities */
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -13,17 +21,26 @@ import { Separator } from "@/components/ui/separator"
 function Playground() {
   return (
     <>
-      <div>playground</div>
-      
+     <div className="title1  font-bold text-3xl what2">
+            Playground
+          </div>
+      {/* <div>playground</div> */}
+      <br />
 
       <div className="bg-white shadow-lg rounded ashraf">
         {/* Resizable panels container */}
         <div className="flex flex-col h-full">
           <ResizablePanelGroup direction="horizontal" className="flex flex-grow">
             <ResizablePanel className="border-r flex-grow">
-              <div className="flex h-full items-center justify-center p-6">
-                <span className="font-semibold">One</span>
-                <Textarea className="mt-4">This is the content of Panel One.</Textarea>
+              <div className="flex flex-col h-full items-center justify-center p-6">
+                <span className="font-semibold text-xl">Original query </span>
+                <Textarea className="mt-4 resize-none w-full flex-grow bg-gray-100"
+                                  placeholder="Type your text query "
+                                  >
+                </Textarea>
+                {/* Add the Button component here */}
+                <br />
+                <Button className="">Submit</Button>
               </div>
             </ResizablePanel>
 
@@ -82,7 +99,7 @@ function Playground() {
                     <span className="font-semibold">Optimized Query</span>
                   </div> */}
                   <div className="flex flex-col h-full items-center justify-center p-6">
-                      <span className="font-semibold text-xl">Optimized Quer</span>
+                      <span className="font-semibold text-xl">Optimized Query</span>
                       <Textarea
                         className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
                         value={""}

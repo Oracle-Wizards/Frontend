@@ -25,19 +25,16 @@ function App() {
       element: <Layout />,
       children: [
         {
-          path: "/",
+          path: "/playground",
           element: <Playground />,//from Playgroud to homepage "a changer" 🙂🪄
         },
-        {
-          path: "/Playground",
-          element: <Playground />,
-        },
+         
         {
           path:"/query",
           element: <Query/>,
         },
         {
-          path:"/home",
+          path:"/",
           element: <Home/>,
         },{
           

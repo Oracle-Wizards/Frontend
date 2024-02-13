@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Button } from "@/components/ui/button";
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -16,9 +17,33 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import  './playgroud.css';
 import { Separator } from "@/components/ui/separator"
+import {AlertDemo} from "../../components/ui/alertError"
+import { parse } from 'node-sql-parser';
 
 
 function Playground() {
+
+  const [sqlQuery, setSqlQuery] = useState('');
+  const [validationResult, setValidationResult] = useState(null);
+  const [validationError, setValidationError] = useState('');
+
+  const handleQueryValidation = () => {
+    try {
+      // Parse the SQL query using sql-parser
+      parse(sqlQuery);
+      // If parsing succeeds, set validation result to true
+      setValidationResult(true);
+      setValidationError('');
+      prompt('Validation Error:', error.message);
+
+
+    } catch (error) { 
+      // If parsing fails, set validation result to false and log the error
+      prompt('Validation Error:', error.message);
+      setValidationResult(false);
+      setValidationError(error.message);    }
+  };
+
   return (
     <>
      <div className="title1  font-bold text-3xl what2">
@@ -41,6 +66,24 @@ function Playground() {
                 {/* Add the Button component here */}
                 <br />
                 <Button className="">Submit</Button>
+                
+            {/* Display alert message if there's a validation error */}
+            {validationResult === false && (
+              <Alert>
+                <RocketIcon className="h-4 w-4" />
+                <AlertTitle>Error!</AlertTitle>
+                <AlertDescription>{validationError}</AlertDescription>
+              </Alert>
+            )}
+
+            {/* Optionally, you can also display a success message if the validation succeeds */}
+            {validationResult === true && (
+              <Alert>
+                <RocketIcon className="h-4 w-4" />
+                <AlertTitle>Success!</AlertTitle>
+                <AlertDescription>The SQL query is valid.</AlertDescription>
+              </Alert>
+            )}
               </div>
             </ResizablePanel>
 
@@ -116,6 +159,7 @@ function Playground() {
           </ResizablePanelGroup>
         </div>
       </div>
+      <AlertDemo />
     </>
   )
 }

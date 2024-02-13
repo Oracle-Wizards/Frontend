@@ -126,7 +126,11 @@ const formatExplanation = (explanation) => {
                   placeholder="Type your text here."
                   onChange={(e) => setOriginalText(e.target.value)}
                 />
+                              <div className="pt-5 mb-0">
+            <Button onClick={handleSubmit}>Generate Query</Button>
+          </div>
               </div>
+
             </ResizablePanel>
 
             <ResizableHandle />
@@ -140,7 +144,7 @@ const formatExplanation = (explanation) => {
                       {loading ?  
                         ( <>
                             <br />
-                            <img src={loadingGif} alt="Loading..."  style={{ width: '50px', height: '50px' }}/>
+                            <img src={loadingGif} alt="Loading..."  style={{ width: '30px', height: '30px' }}/>
 
                             {/* <Spinner/> */}
                           </>
@@ -157,7 +161,7 @@ const formatExplanation = (explanation) => {
                     
                     {generatedQuery && (
                       <CopyToClipboard text={generatedQuery}>
-                      <Button className="mt-2  py-2 px-4  rounded-lg" variant="outline" >
+                      <Button className="mt-2 py-1 px-4  rounded-lg" variant="outline" >
                        <FontAwesomeIcon icon={faCopy} className="mr-2" />
                        Copy Query
                      </Button>
@@ -180,7 +184,7 @@ const formatExplanation = (explanation) => {
                       {loading ? 
                         ( <>
                             <br />
-                            <img src={loadingGif} alt="Loading..."  style={{ width: '50px', height: '50px' }}/>
+                            <img src={loadingGif} alt="Loading..."  style={{ width: '30px', height: '30px' }}/>
                           </>
                         ):(
                           <>
@@ -200,9 +204,7 @@ const formatExplanation = (explanation) => {
             </ResizablePanel>
 
           </ResizablePanelGroup>
-          <div className="p-6">
-            <Button onClick={handleSubmit}>Submit</Button>
-          </div>
+          
         </div>
       </div>
     </>

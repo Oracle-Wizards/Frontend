@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { Button } from "@/components/ui/button";
 import React, { useState } from 'react';
 import {
@@ -15,11 +14,15 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Textarea } from '@/components/ui/textarea';
-import  './playgroud.css';
+import './playgroud.css';
 import { Separator } from "@/components/ui/separator"
-import {AlertDemo} from "../../components/ui/alertError"
+import {AlertDemo} from "../../components/alertError"
 import { Parser } from 'node-sql-parser';
 import { RocketIcon } from "@radix-ui/react-icons"
+import Execution from "../../components/execution/execution"
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
 import {
   Alert,
@@ -28,31 +31,36 @@ import {
 } from "@/components/ui/alert"
 
 function Playground() {
-
+  const opt = {
+    database: 'MySQL' // MySQL is the default database
+  }
   const [sqlQuery, setSqlQuery] = useState('');
   const [validationResult, setValidationResult] = useState(null);
   const [validationError, setValidationError] = useState('');
+  const [optimizedQuery, setOptimizedQuery] = useState('SELECT * FROM TABLE WHERE condition');
   const parser = new Parser();
 
   const handleQueryValidation = () => {
     try {
       // Parse the SQL query using sql-parser
-      parser.astify(sqlQuery);
+      parser.astify(sqlQuery, opt);
       // If parsing succeeds, set validation result to true
       setValidationResult(true);
       setValidationError('');
-      prompt('Validation Error:', error.message);
-
-
-    } catch (error) { 
-      // If parsing fails, set validation result to false and log the error
-      prompt('Validation Error:', error.message);
+      // Example of setting optimized query
+      setOptimizedQuery('SELECT * FROM Table WHERE condition');
+    } catch (error) {
+      // If parsing fails, set validation result to false and display the error message
       setValidationResult(false);
-      setValidationError(error.message);    }
+      setValidationError(error.message);
+      // Display the error message as an alert dialog
+      window.alert('Validation Error: ' + error.message);
+    }
   };
-
+  
   return (
     <>
+    <div>
      <div className="title1  font-bold text-3xl what2">
             Playground
           </div>
@@ -101,7 +109,7 @@ function Playground() {
             <ResizablePanel className="flex-grow">
               {/* Nested ResizablePanelGroup */}
               <ResizablePanelGroup direction="vertical" className="flex flex-grow">
-                <ResizablePanel className="border-b flex-grow">
+                {/* <ResizablePanel className="border-b flex-grow">
                   <div className="flex flex-col h-full items-center justify-center p-6">
                     <div className="">
                       <span className="flex font-semibold text-xl">Plan d'execution</span>
@@ -109,7 +117,7 @@ function Playground() {
                       </div>                       
                       <Separator className="pb-1 "/>
 
-                    <div className= "w-full flex">
+                     <div className= "w-full flex">
                       <Table >
                         <TableHeader>
                           <TableRow>
@@ -144,22 +152,36 @@ function Playground() {
                   </div>
                 </ResizablePanel>
 
-                <ResizableHandle />
+                <ResizableHandle /> */}
 
                 <ResizablePanel className="flex-grow">
-                  {/* <div className="flex h-full items-center justify-center p-6">
-                    <span className="font-semibold">Optimized Query</span>
-                  </div> */}
                   <div className="flex flex-col h-full items-center justify-center p-6">
                       <span className="font-semibold text-xl">Optimized Query</span>
                       <Textarea
                         className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
-                        value={""}
+                        value={optimizedQuery}
                         readOnly
                       />
-                      {/* <div className="App">
-                        <DisplaySql sqlQuery={generatedQuery} />
-                      </div> */}
+                      {optimizedQuery && (
+                        <>
+                              <div className="flex justify-between">
+                                <div className="flex-grow p-2">
+                                  <CopyToClipboard text={optimizedQuery}>
+                                    <Button className="w-full mt-2 py-1 px-4 rounded-lg" variant="outline" >
+                                      <FontAwesomeIcon icon={faCopy} className="mr-2" />
+                                      Copy Query
+                                    </Button>
+                                  </CopyToClipboard>
+                                </div>
+                                <div className="flex-grow p-2">
+                                  <Button className="w-full mt-2 py-1 px-4 rounded-lg">Show execution plan</Button>
+                                </div>
+                              </div>
+
+
+                   </>
+                   
+                    )}
                     </div>
                 </ResizablePanel>
                 
@@ -168,7 +190,9 @@ function Playground() {
           </ResizablePanelGroup>
         </div>
       </div>
-      <AlertDemo />
+      </div>
+      <br />
+      <Execution />
     </>
   )
 }

@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button";
-import React, { useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import  { useState } from 'react';
+
 import {
   ResizableHandle,
   ResizablePanel,
@@ -15,7 +8,6 @@ import {
 } from "@/components/ui/resizable";
 import { Textarea } from '@/components/ui/textarea';
 import './playgroud.css';
-import { Separator } from "@/components/ui/separator"
 import {AlertDemo} from "../../components/alertError"
 import { Parser } from 'node-sql-parser';
 import { RocketIcon } from "@radix-ui/react-icons"
@@ -23,7 +15,6 @@ import Execution from "../../components/execution/execution"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
-import { Spinner } from '@chakra-ui/react'
 
 import {
   Alert,

@@ -15,8 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
-import { Spinner } from '@chakra-ui/react'
 import loadingGif  from './loading.gif';
+import { Spinner } from '@chakra-ui/react'
 
 
 function DisplaySql(props) {

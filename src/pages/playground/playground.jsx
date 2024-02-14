@@ -202,7 +202,7 @@ function Playground() {
       </div>
       </div>
       <br />
-      {showExecutionPlan && <Execution query={"data"} />}
+      {showExecutionPlan && <Execution query={"SELECT * FROM STORES ;"} />}
     </>
   )
 }

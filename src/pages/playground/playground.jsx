@@ -28,7 +28,9 @@ import {
 } from "@/components/ui/alert"
 
 function Playground() {
-
+  const opt = {
+    database: 'MySQL' // MySQL is the default database
+  }
   const [sqlQuery, setSqlQuery] = useState('');
   const [validationResult, setValidationResult] = useState(null);
   const [validationError, setValidationError] = useState('');
@@ -37,20 +39,19 @@ function Playground() {
   const handleQueryValidation = () => {
     try {
       // Parse the SQL query using sql-parser
-      parser.astify(sqlQuery);
+      parser.astify(sqlQuery, opt);
       // If parsing succeeds, set validation result to true
       setValidationResult(true);
       setValidationError('');
-      prompt('Validation Error:', error.message);
-
-
-    } catch (error) { 
-      // If parsing fails, set validation result to false and log the error
-      prompt('Validation Error:', error.message);
+    } catch (error) {
+      // If parsing fails, set validation result to false and display the error message
       setValidationResult(false);
-      setValidationError(error.message);    }
+      setValidationError(error.message);
+      // Display the error message as an alert dialog
+      window.alert('Validation Error: ' + error.message);
+    }
   };
-
+  
   return (
     <>
      <div className="title1  font-bold text-3xl what2">

@@ -18,7 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import  './playgroud.css';
 import { Separator } from "@/components/ui/separator"
 import {AlertDemo} from "../../components/ui/alertError"
-import { parse } from 'node-sql-parser';
+import { Parser } from 'node-sql-parser';
 import { RocketIcon } from "@radix-ui/react-icons"
 
 import {
@@ -32,11 +32,12 @@ function Playground() {
   const [sqlQuery, setSqlQuery] = useState('');
   const [validationResult, setValidationResult] = useState(null);
   const [validationError, setValidationError] = useState('');
+  const parser = new Parser();
 
   const handleQueryValidation = () => {
     try {
       // Parse the SQL query using sql-parser
-      parse(sqlQuery);
+      parser.astify(sqlQuery);
       // If parsing succeeds, set validation result to true
       setValidationResult(true);
       setValidationError('');

@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button";
-import React, { useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import  { useState } from 'react';
+
 import {
   ResizableHandle,
   ResizablePanel,
@@ -15,7 +8,6 @@ import {
 } from "@/components/ui/resizable";
 import { Textarea } from '@/components/ui/textarea';
 import './playgroud.css';
-import { Separator } from "@/components/ui/separator"
 import {AlertDemo} from "../../components/alertError"
 import { Parser } from 'node-sql-parser';
 import { RocketIcon } from "@radix-ui/react-icons"
@@ -38,6 +30,12 @@ function Playground() {
   const [validationResult, setValidationResult] = useState(null);
   const [validationError, setValidationError] = useState('');
   const [optimizedQuery, setOptimizedQuery] = useState('SELECT * FROM TABLE WHERE condition');
+  const [showExecutionPlan, setShowExecutionPlan] = useState(false);
+
+  const toggleExecutionPlan = () => {
+    setShowExecutionPlan(!showExecutionPlan);
+  };
+
   const parser = new Parser();
 
   const handleQueryValidation = () => {
@@ -199,7 +197,10 @@ function Playground() {
                                   </CopyToClipboard>
                                 </div>
                                 <div className="flex-grow p-2">
-                                  <Button className="w-full mt-2 py-1 px-4 rounded-lg">Show execution plan</Button>
+                                  <Button className="w-full mt-2 py-1 px-4 rounded-lg" 
+                                     onClick={toggleExecutionPlan}>
+                                       {showExecutionPlan ? "Hide execute plan" : "Show execute plan"}
+                                    </Button>
                                 </div>
                               </div>
 
@@ -217,7 +218,7 @@ function Playground() {
       </div>
       </div>
       <br />
-      <Execution />
+      {showExecutionPlan && <Execution query={"SELECT * FROM STORES ;"} />}
     </>
   )
 }

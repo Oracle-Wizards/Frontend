@@ -19,7 +19,13 @@ import  './playgroud.css';
 import { Separator } from "@/components/ui/separator"
 import {AlertDemo} from "../../components/ui/alertError"
 import { parse } from 'node-sql-parser';
+import { RocketIcon } from "@radix-ui/react-icons"
 
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 function Playground() {
 
@@ -59,13 +65,15 @@ function Playground() {
             <ResizablePanel className="border-r flex-grow">
               <div className="flex flex-col h-full items-center justify-center p-6">
                 <span className="font-semibold text-xl">Original query </span>
-                <Textarea className="mt-4 resize-none w-full flex-grow bg-gray-100"
-                                  placeholder="Type your text query "
-                                  >
-                </Textarea>
-                {/* Add the Button component here */}
-                <br />
-                <Button className="">Submit</Button>
+                <Textarea
+            className="mt-4 resize-none w-full flex-grow bg-gray-100"
+            placeholder="Type your text query"
+            value={sqlQuery}
+            onChange={(e) => setSqlQuery(e.target.value)}
+          />
+          <br />
+          <Button onClick={handleQueryValidation}>Submit</Button>
+
                 
             {/* Display alert message if there's a validation error */}
             {validationResult === false && (

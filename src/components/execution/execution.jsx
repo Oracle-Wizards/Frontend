@@ -19,13 +19,14 @@ import {
   AlertTitle,
 } from "@/components/ui/alert"
 
-function Execution() {
+function Execution({ query }) {
+  // query = "SELECT * FROM Etudiant"
   return (
     <>
       <div className="bg-white shadow-lg rounded ashraf h-auto ">
         <div className="flex flex-col  items-center justify-center p-6">
           <div className="">
-            <span className="flex font-semibold text-xl">Plan d'execution</span>
+            <span className="flex font-semibold text-xl">Execution Plan {query}</span>
           </div>
           <Separator className="pb-1 "/>
           <div className= "w-full flex ">

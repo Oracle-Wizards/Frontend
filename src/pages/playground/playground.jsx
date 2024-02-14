@@ -43,6 +43,9 @@ function Playground() {
       // If parsing succeeds, set validation result to true
       setValidationResult(true);
       setValidationError('');
+
+      // Send the SQL query to the backend after successful validation
+      sendQueryToBackend(sqlQuery);
     } catch (error) {
       // If parsing fails, set validation result to false and display the error message
       setValidationResult(false);
@@ -52,6 +55,30 @@ function Playground() {
     }
   };
   
+  const sendQueryToBackend = (query) => {
+    // Make a POST request to your Flask backend with the SQL query
+    fetch('http://127.0.0.1:5000/api/query', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query })
+    })
+      .then(response => {
+        if (response.ok) {
+          // Handle successful response from the backend
+          console.log('Query successfully sent to the backend');
+        } else {
+          // Handle error response from the backend
+          throw new Error('Failed to send query to the backend');
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occur during the fetch operation
+        console.error('Error sending query to backend:', error);
+        window.alert('Error sending query to backend: ' + error.message);
+      });
+  };
   return (
     <>
      <div className="title1  font-bold text-3xl what2">

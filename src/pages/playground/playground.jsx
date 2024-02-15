@@ -57,9 +57,35 @@ function Playground() {
     }
   };
   
+  // const sendQueryToBackend = (query) => {
+  //   // Make a POST request to your Flask backend with the SQL query
+  //   fetch('http://127.0.0.1:5000/analyze-sql', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({ query })
+  //   })
+  //     .then(response => {
+  //       if (response.ok) {
+  //         // Handle successful response from the backend
+  //         setOptimizedQuery(response.optimized_query);
+  //         console.log('Query successfully sent to the backend');
+  //       } else {
+  //         // Handle error response from the backend
+  //         throw new Error('Failed to send query to the backend');
+  //       }
+  //     })
+  //     .catch(error => {
+  //       // Handle any errors that occur during the fetch operation
+  //       console.error('Error sending query to backend:', error);
+  //       window.alert('Error sending query to backend: ' + error.message);
+  //     });
+  // };
+
   const sendQueryToBackend = (query) => {
     // Make a POST request to your Flask backend with the SQL query
-    fetch('http://127.0.0.1:5000/api/query', {
+    fetch('http://127.0.0.1:5000/analyze-sql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -69,11 +95,16 @@ function Playground() {
       .then(response => {
         if (response.ok) {
           // Handle successful response from the backend
-          console.log('Query successfully sent to the backend');
+          return response.json(); // Parse the JSON response
         } else {
           // Handle error response from the backend
           throw new Error('Failed to send query to the backend');
         }
+      })
+      .then(data => {
+        // Update the state with the optimized query
+        setOptimizedQuery(data.optimized_query);
+        console.log('Query successfully sent to the backend');
       })
       .catch(error => {
         // Handle any errors that occur during the fetch operation
@@ -81,6 +112,8 @@ function Playground() {
         window.alert('Error sending query to backend: ' + error.message);
       });
   };
+  
+  
   return (
     <>
     <div>
@@ -105,7 +138,7 @@ function Playground() {
           />
           <br />
           <Button onClick={handleQueryValidation}>Submit</Button>
-
+          <br />
                 
             {/* Display alert message if there's a validation error */}
             {validationResult === false && (

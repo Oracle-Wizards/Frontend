@@ -48,8 +48,9 @@ function Playground() {
       // If parsing succeeds, set validation result to true
       setValidationResult(true);
       setValidationError('');
-      // Example of setting optimized query
-      setOptimizedQuery('SELECT * FROM Table WHERE condition');
+
+      // Send the SQL query to the backend after successful validation
+      sendQueryToBackend(sqlQuery);
     } catch (error) {
       // If parsing fails, set validation result to false and display the error message
       setValidationResult(false);
@@ -61,6 +62,63 @@ function Playground() {
     setLoading(false);
 
   };
+  
+  // const sendQueryToBackend = (query) => {
+  //   // Make a POST request to your Flask backend with the SQL query
+  //   fetch('http://127.0.0.1:5000/analyze-sql', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({ query })
+  //   })
+  //     .then(response => {
+  //       if (response.ok) {
+  //         // Handle successful response from the backend
+  //         setOptimizedQuery(response.optimized_query);
+  //         console.log('Query successfully sent to the backend');
+  //       } else {
+  //         // Handle error response from the backend
+  //         throw new Error('Failed to send query to the backend');
+  //       }
+  //     })
+  //     .catch(error => {
+  //       // Handle any errors that occur during the fetch operation
+  //       console.error('Error sending query to backend:', error);
+  //       window.alert('Error sending query to backend: ' + error.message);
+  //     });
+  // };
+
+  const sendQueryToBackend = (query) => {
+    // Make a POST request to your Flask backend with the SQL query
+    fetch('http://127.0.0.1:5000/analyze-sql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query })
+    })
+      .then(response => {
+        if (response.ok) {
+          // Handle successful response from the backend
+          return response.json(); // Parse the JSON response
+        } else {
+          // Handle error response from the backend
+          throw new Error('Failed to send query to the backend');
+        }
+      })
+      .then(data => {
+        // Update the state with the optimized query
+        setOptimizedQuery(data.optimized_query);
+        console.log('Query successfully sent to the backend');
+      })
+      .catch(error => {
+        // Handle any errors that occur during the fetch operation
+        console.error('Error sending query to backend:', error);
+        window.alert('Error sending query to backend: ' + error.message);
+      });
+  };
+  
   
   return (
     <>
@@ -86,7 +144,7 @@ function Playground() {
           />
           <br />
           <Button onClick={handleQueryValidation}>Submit</Button>
-
+          <br />
                 
             {/* Display alert message if there's a validation error */}
             {validationResult === false && (

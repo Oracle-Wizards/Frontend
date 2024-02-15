@@ -31,6 +31,7 @@ function Playground() {
   const [validationError, setValidationError] = useState('');
   const [optimizedQuery, setOptimizedQuery] = useState('SELECT * FROM TABLE WHERE condition');
   const [showExecutionPlan, setShowExecutionPlan] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleExecutionPlan = () => {
     setShowExecutionPlan(!showExecutionPlan);
@@ -40,6 +41,8 @@ function Playground() {
 
   const handleQueryValidation = () => {
     try {
+      setLoading(true);
+
       // Parse the SQL query using sql-parser
       parser.astify(sqlQuery, opt);
       // If parsing succeeds, set validation result to true
@@ -53,7 +56,10 @@ function Playground() {
       setValidationError(error.message);
       // Display the error message as an alert dialog
       window.alert('Validation Error: ' + error.message);
+      
     }
+    setLoading(false);
+
   };
   
   return (
@@ -155,34 +161,45 @@ function Playground() {
                 <ResizablePanel className="flex-grow">
                   <div className="flex flex-col h-full items-center justify-center p-6">
                       <span className="font-semibold text-xl">Optimized Query</span>
-                      <Textarea
-                        className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
-                        value={optimizedQuery}
-                        readOnly
-                      />
-                      {optimizedQuery && (
-                        <>
-                              <div className="flex justify-between">
-                                <div className="flex-grow p-2">
-                                  <CopyToClipboard text={optimizedQuery}>
-                                    <Button className="w-full mt-2 py-1 px-4 rounded-lg" variant="outline" >
-                                      <FontAwesomeIcon icon={faCopy} className="mr-2" />
-                                      Copy Query
-                                    </Button>
-                                  </CopyToClipboard>
-                                </div>
-                                <div className="flex-grow p-2">
-                                  <Button className="w-full mt-2 py-1 px-4 rounded-lg" 
-                                     onClick={toggleExecutionPlan}>
-                                       {showExecutionPlan ? "Hide execute plan" : "Show execute plan"}
-                                    </Button>
-                                </div>
-                              </div>
+                      {loading ?  
+                        ( <>
+                            <br />
+                            <img src="public/OIG7.jpg" alt="Loading..."  style={{ width: '30px', height: '30px' }}/>
+
+                            {/* <Spinner/> */}
+                          </>
+                        ):(<>
+                            <Textarea
+                              className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
+                              value={optimizedQuery}
+                              readOnly
+                            />
+                            {optimizedQuery && (
+                              <>
+                                         <div className="flex justify-between">
+                                           <div className="flex-grow p-2">
+                                             <CopyToClipboard text={optimizedQuery}>
+                                               <Button className="w-full mt-2 py-1 px-4 rounded-lg" variant="outline" >
+                                                 <FontAwesomeIcon icon={faCopy} className="mr-2" />
+                                                 Copy Query
+                                               </Button>
+                                             </CopyToClipboard>
+                                           </div>
+                                           <div className="flex-grow p-2">
+                                             <Button className="w-full mt-2 py-1 px-4 rounded-lg" 
+                                                onClick={toggleExecutionPlan}>
+                                                  {showExecutionPlan ? "Hide execute plan" : "Show execute plan"}
+                                               </Button>
+                                           </div>
+                                         </div>
 
 
-                   </>
-                   
-                    )}
+                        </>
+
+                         )}
+                         </>
+                         )}
+
                     </div>
                 </ResizablePanel>
                 

@@ -20,6 +20,7 @@ function Playground() {
   const [validationError, setValidationError] = useState('');
   const [optimizedQuery, setOptimizedQuery] = useState('');
   const [showExecutionPlan, setShowExecutionPlan] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleExecutionPlan = () => {
     setShowExecutionPlan(!showExecutionPlan);
@@ -43,6 +44,8 @@ function Playground() {
   };
 
   const sendQueryToBackend = (query) => {
+    setLoading(true); // Activer le chargement
+
     fetch('http://127.0.0.1:5000/analyze-sql', {
       method: 'POST',
       headers: {
@@ -64,8 +67,20 @@ function Playground() {
       .catch(error => {
         console.error('Error sending query to backend:', error);
         window.alert('Error sending query to backend: ' + error.message);
+      })
+      .finally(() => {
+        setLoading(false); // Désactiver le chargement une fois le traitement terminé
       });
   };
+  const getRandomImageName = () => {
+    const imageNames = ['OIG4', 'OIG5', 'OIG6', 'OIG7'];
+    const randomIndex = Math.floor(Math.random() * imageNames.length);
+    return imageNames[randomIndex];
+  };
+  
+  // Dans votre composant où vous définissez l'image de chargement
+  const randomImageName = getRandomImageName();
+  const loadingImageUrl = `public/${randomImageName}.jpg`;
 
   return (
     <>
@@ -115,28 +130,39 @@ function Playground() {
                   <ResizablePanel className="flex-grow">
                     <div className="flex flex-col h-full items-center justify-center p-6">
                       <span className="font-semibold text-xl">Optimized Query</span>
-                      <Textarea
-                        className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
-                        value={optimizedQuery}
-                        readOnly
-                      />
-                      {optimizedQuery && (
-                        <div className="flex justify-between">
-                          <div className="flex-grow p-2">
-                            <CopyToClipboard text={optimizedQuery}>
-                              <Button className="w-full mt-2 py-1 px-4 rounded-lg" variant="outline" >
-                                <FontAwesomeIcon icon={faCopy} className="mr-2" />
-                                Copy Query
-                              </Button>
-                            </CopyToClipboard>
-                          </div>
-                          <div className="flex-grow p-2">
-                            <Button className="w-full mt-2 py-1 px-4 rounded-lg" onClick={toggleExecutionPlan}>
-                              {showExecutionPlan ? "Hide execute plan" : "Show execute plan"}
-                            </Button>
-                          </div>
-                        </div>
-                      )}
+                      {loading ? 
+                        ( <>
+                            <br />
+                            <div className="loader w-12 h-12 rounded-full border-2 border-gray-300 border-t-gray-800 animate-spin">
+                              <img src={loadingImageUrl} alt="Loading..." className="w-full h-full rounded-full" />
+                            </div>
+                          </>
+                        ):(
+                          <>
+                            <Textarea
+                              className="mt-4 resize-none w-full flex-grow text-base bg-gray-100"
+                              value={optimizedQuery}
+                              readOnly
+                            />
+                            {optimizedQuery && (
+                              <div className="flex justify-between">
+                                <div className="flex-grow p-2">
+                                  <CopyToClipboard text={optimizedQuery}>
+                                    <Button className="w-full mt-2 py-1 px-4 rounded-lg" variant="outline" >
+                                      <FontAwesomeIcon icon={faCopy} className="mr-2" />
+                                      Copy Query
+                                    </Button>
+                                  </CopyToClipboard>
+                                </div>
+                                <div className="flex-grow p-2">
+                                  <Button className="w-full mt-2 py-1 px-4 rounded-lg" onClick={toggleExecutionPlan}>
+                                    {showExecutionPlan ? "Hide execute plan" : "Show execute plan"}
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        )}
                     </div>
                   </ResizablePanel>
                 </ResizablePanelGroup>

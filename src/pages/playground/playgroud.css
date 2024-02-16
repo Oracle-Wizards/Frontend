@@ -6,6 +6,13 @@
     -webkit-text-fill-color: transparent;
     
 }
+.title3{
+    background: #15b2c1;
+    background: linear-gradient(to right, #46cad6 3%, #c042d1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+}
 .title2{
     background: #1D95CF;
     background: linear-gradient(to top left, #1D95CF 3%, #CFCFCF 100%);

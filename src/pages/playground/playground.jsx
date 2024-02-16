@@ -29,7 +29,7 @@ import {
 
 function Playground() {
   const opt = {
-    database: 'MySQL' // MySQL is the default database
+    database: 'PostgreSQL' //   is the default database
   }
   const [sqlQuery, setSqlQuery] = useState('');
   const [validationResult, setValidationResult] = useState(null);
@@ -45,7 +45,7 @@ function Playground() {
       setValidationError('');
 
       // Send the SQL query to the backend after successful validation
-      sendQueryToBackend(sqlQuery);
+      verifyQueryBackend(sqlQuery);
     } catch (error) {
       // If parsing fails, set validation result to false and display the error message
       setValidationResult(false);
@@ -55,9 +55,32 @@ function Playground() {
     }
   };
   
+  async function verifyQueryBackend(query) {
+    // Make a POST request to your Flask backend with the SQL query
+    fetch('http://127.0.0.1:5000/api/validation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query })
+    }) .then(response=>{
+      if (response.ok) {
+        // Handle successful response from the backend
+        console.log('Query is valid');
+      } else {
+        // Handle error response from the backend
+        throw new Error('false query');
+      }
+    
+    })      .catch(error => {
+      // Handle any errors that occur during the fetch operation
+      console.error('Error sending query to backend:', error);
+      window.alert('Error sending query to backend: ' + error.message);
+    });
+    }
   const sendQueryToBackend = (query) => {
     // Make a POST request to your Flask backend with the SQL query
-    fetch('http://127.0.0.1:5000/api/query', {
+    fetch('http://127.0.0.1:5000/api/optimization', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -106,10 +129,15 @@ function Playground() {
                 
             {/* Display alert message if there's a validation error */}
             {validationResult === false && (
-              <Alert>
+              <Alert style={{ backgroundColor: 'red', color: 'white' }}>
                 <RocketIcon className="h-4 w-4" />
                 <AlertTitle>Error!</AlertTitle>
-                <AlertDescription>{validationError}</AlertDescription>
+                <AlertDescription style={{ color: 'white' }}>
+                  {validationError}
+                  <br />
+                  {/* Add a link to /ChatBot */}
+                  <a href="/ChatBot" style={{ color: 'white' }}>Ask our ChatBOT</a>
+                </AlertDescription>
               </Alert>
             )}
 

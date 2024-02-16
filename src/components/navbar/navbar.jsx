@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
+import './navbar.css';
 
 const Navbar = () => {
     return (
@@ -18,12 +19,12 @@ const Navbar = () => {
 
                 <div className="hidden md:flex md:space-x-10 list-none">
                     <li>
-                        <Link to="/ChatBot" className="text-base font-normal text-gray-500 list-none hover:text-gray-900">
+                        <Link to="/ChatBot" className="text-lg font-semibold text-gray-500 list-none title1 hover:text-gray-900">
                             Text-to-SQL Converter
                         </Link>
                     </li>
                     <li>
-                        <Link to="/playground" className="text-base font-normal text-gray-500 list-none hover:text-gray-900">
+                        <Link to="/playground" className="text-lg font-semibold text-gray-500 list-none title2 hover:text-gray-900">
                             SQL Optimizer
                         </Link>
                     </li>

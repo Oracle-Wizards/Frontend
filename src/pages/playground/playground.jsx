@@ -21,6 +21,8 @@ function Playground() {
   const [optimizedQuery, setOptimizedQuery] = useState('');
   const [showExecutionPlan, setShowExecutionPlan] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
 
   const toggleExecutionPlan = () => {
     setShowExecutionPlan(!showExecutionPlan);
@@ -43,35 +45,104 @@ function Playground() {
     }
   };
 
-  const sendQueryToBackend = (query) => {
-    setLoading(true); // Activer le chargement
+  // const sendQueryToBackend = (query) => {
+  //   setLoading(true); // Activer le chargement
 
-    fetch('http://127.0.0.1:5000/analyze-sql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ query })
+  //   fetch('http://127.0.0.1:5000/analyze-sql', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({ query })
+  //   })
+  //     .then(response => {
+  //       if (response.ok) {
+  //         return response.json();
+  //       } else {
+  //         throw new Error('Failed to send query to the backend');
+  //       }
+  //     })
+  //     .then(data => {
+  //       setOptimizedQuery(data.optimized_query);
+  //       console.log('Query successfully sent to the backend');
+  //     })
+  //     .catch(error => {
+  //       console.error('Error sending query to backend:', error);
+  //       window.alert('Error sending query to backend: ' + error.message);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false); // Désactiver le chargement une fois le traitement terminé
+  //     });
+  // };
+
+  const sendQueryToBackend = (query) => {
+    setLoading(true); // Activate loading
+
+    // Define the endpoints for analyze-sql and optimize-sql
+    const analyzeSqlEndpoint = 'http://127.0.0.1:5000/analyze_sql';
+    const optimizeSqlEndpoint = 'http://127.0.0.1:5000/optimise_query';
+
+    // Define the payload for the requests
+    const requestData = { query };
+
+    // Send request to analyze-sql endpoint
+    fetch(analyzeSqlEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
     })
-      .then(response => {
+    .then(response => {
         if (response.ok) {
-          return response.json();
+            return response.json();
         } else {
-          throw new Error('Failed to send query to the backend');
+            throw new Error('Failed to analyze SQL query');
         }
-      })
-      .then(data => {
-        setOptimizedQuery(data.optimized_query);
-        console.log('Query successfully sent to the backend');
-      })
-      .catch(error => {
-        console.error('Error sending query to backend:', error);
-        window.alert('Error sending query to backend: ' + error.message);
-      })
-      .finally(() => {
-        setLoading(false); // Désactiver le chargement une fois le traitement terminé
-      });
+    })
+    .then(data => {
+        // Handle response from analyze-sql endpoint
+        console.log('SQL query analysis result:', data);
+        if (data.status === 'success') {
+            // If the query is valid, send request to optimize-sql endpoint
+            fetch(optimizeSqlEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to optimize SQL query');
+                }
+            })
+            .then(data => {
+                // Handle response from optimize-sql endpoint
+                console.log('Optimized SQL query:', data.optimized_query);
+                setOptimizedQuery(data.optimized_query);
+            })
+            .catch(error => {
+                console.error('Error optimizing SQL query:', error);
+                setAlertMessage('Error optimizing SQL query: ' + error.message);
+            });
+        } else {
+            // Handle case where SQL query is invalid
+            setAlertMessage('Invalid SQL query: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error analyzing SQL query:', error);
+        setAlertMessage('Error analyzing SQL query: ' + error.message);
+    })
+    .finally(() => {
+        setLoading(false); // Deactivate loading
+    });
   };
+
+
   const getRandomImageName = () => {
     const imageNames = ['OIG4', 'OIG5', 'OIG6', 'OIG7'];
     const randomIndex = Math.floor(Math.random() * imageNames.length);

@@ -30,12 +30,30 @@ function Playground() {
 
   const parser = new Parser();
 
+  // const handleQueryValidation = () => {
+  //   try {
+  //     parser.astify(sqlQuery, opt);
+  //     setValidationResult(true);
+  //     setValidationError('');
+
+  //     // Envoyer la requête SQL analysée au backend
+  //     sendQueryToBackend(sqlQuery);
+  //   } catch (error) {
+  //     setValidationResult(false);
+  //     setValidationError(error.message);
+  //     window.alert('Validation Error: ' + error.message);
+  //   }
+  // };
+
   const handleQueryValidation = () => {
     try {
       parser.astify(sqlQuery, opt);
       setValidationResult(true);
       setValidationError('');
-
+  
+      // Clear the optimizedQuery state
+      setOptimizedQuery('');
+  
       // Envoyer la requête SQL analysée au backend
       sendQueryToBackend(sqlQuery);
     } catch (error) {
@@ -44,6 +62,7 @@ function Playground() {
       window.alert('Validation Error: ' + error.message);
     }
   };
+  
 
   // const sendQueryToBackend = (query) => {
   //   setLoading(true); // Activer le chargement
@@ -105,6 +124,7 @@ function Playground() {
         console.log('SQL query analysis result:', data);
         if (data.status === 'success') {
             // If the query is valid, send request to optimize-sql endpoint
+            setLoading(true); // Activate loading for optimization phase
             fetch(optimizeSqlEndpoint, {
                 method: 'POST',
                 headers: {
@@ -127,20 +147,22 @@ function Playground() {
             .catch(error => {
                 console.error('Error optimizing SQL query:', error);
                 setAlertMessage('Error optimizing SQL query: ' + error.message);
+            })
+            .finally(() => {
+                setLoading(false); // Deactivate loading for optimization phase
             });
         } else {
             // Handle case where SQL query is invalid
             setAlertMessage('Invalid SQL query: ' + data.message);
+            setLoading(false); // Deactivate loading for analysis phase
         }
     })
     .catch(error => {
         console.error('Error analyzing SQL query:', error);
         setAlertMessage('Error analyzing SQL query: ' + error.message);
-    })
-    .finally(() => {
-        setLoading(false); // Deactivate loading
+        setLoading(false); // Deactivate loading for analysis phase
     });
-  };
+};
 
 
   const getRandomImageName = () => {

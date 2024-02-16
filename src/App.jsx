@@ -6,12 +6,12 @@ import './App.css'
 import Query from './pages/query/Query';
 import { ChakraProvider } from '@chakra-ui/react'
 import Home from './pages/home/Home';
-
+import Navbar from "./components/navbar";
 function App() {
   const Layout = () => {
     return (
       <ChakraProvider>
-    
+        <Navbar />
           <Outlet />
         
       </ChakraProvider>

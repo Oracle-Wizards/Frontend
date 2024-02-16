@@ -18,7 +18,7 @@ function Playground() {
   const [sqlQuery, setSqlQuery] = useState('');
   const [validationResult, setValidationResult] = useState(null);
   const [validationError, setValidationError] = useState('');
-  const [optimizedQuery, setOptimizedQuery] = useState('');
+  const [optimizedQuery, setOptimizedQuery] = useState('select');
   const [showExecutionPlan, setShowExecutionPlan] = useState(false);
   const [loading, setLoading] = useState(false);
 

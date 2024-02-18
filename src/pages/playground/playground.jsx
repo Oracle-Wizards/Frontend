@@ -74,19 +74,27 @@ function Playground() {
       console.log('SQL query analysis result:', analyzeData);
 
       if (analyzeData.status === 'success') {
+        setLoading(true);  
+
         setBackendValidationResult(true); 
         sendOptimizeRequest(requestData);
       } else {
         setValidationError('Invalid SQL query');
-        setBackendValidationResult(false);  
+        setBackendValidationResult(false); 
+        setShowErrorMessage(true);
+        setLoading(false);
+
+         
+        
       }
     } catch (error) {
       console.error('Error analyzing SQL query:', error);
       setValidationError('Error analyzing SQL query');
       setBackendValidationResult(false); 
-    } finally {
       setLoading(false);  
-    }
+      setShowErrorMessage(true);
+
+    } 
   };
 
   const sendOptimizeRequest = async (query) => {
@@ -109,6 +117,9 @@ function Playground() {
       setOptimizedQuery(data.optimized_query);
     } catch (error) {
       console.error('Error optimizing SQL query:', error);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -136,7 +147,8 @@ function Playground() {
                 <div className="flex flex-col h-full items-center justify-center p-6">
                   <span className="font-semibold text-xl">Original query</span>
                   <Textarea
-                    className="mt-4 resize-none w-full flex-grow bg-gray-100"
+                    spellcheck="false"
+                    className="mt-4 resize-none w-full flex-grow bg-gray-100 font-semibold text-base"
                     placeholder="Type your text query"
                     value={sqlQuery}
                     onChange={(e) => setSqlQuery(e.target.value)}

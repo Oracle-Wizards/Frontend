@@ -136,7 +136,8 @@ function Playground() {
                 <div className="flex flex-col h-full items-center justify-center p-6">
                   <span className="font-semibold text-xl">Original query</span>
                   <Textarea
-                    className="mt-4 resize-none w-full flex-grow bg-gray-100"
+                    spellcheck="false"
+                    className="mt-4 resize-none w-full flex-grow font-semibold bg-gray-100 text-base"
                     placeholder="Type your text query"
                     value={sqlQuery}
                     onChange={(e) => setSqlQuery(e.target.value)}

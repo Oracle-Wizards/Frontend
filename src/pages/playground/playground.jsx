@@ -1,4 +1,5 @@
-import   { useState } from 'react';
+/* eslint-disable react/no-unescaped-entities */
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Textarea } from '@/components/ui/textarea';
@@ -7,22 +8,24 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Parser } from 'node-sql-parser'; // Assurez-vous d'installer ce package si ce n'est pas déjà fait
+import { Parser } from 'node-sql-parser';  
 import './playgroud.css';
 import Execution from "../../components/execution/execution";
+import { AlertCircle } from "lucide-react"
+import { Link } from 'react-router-dom';
 
 function Playground() {
   const opt = {
-    database: 'PostgreSQL' //   is the default database
-  }
+    database: 'PostgreSQL'
+  };
   const [sqlQuery, setSqlQuery] = useState('');
   const [validationResult, setValidationResult] = useState(null);
   const [validationError, setValidationError] = useState('');
   const [optimizedQuery, setOptimizedQuery] = useState('');
   const [showExecutionPlan, setShowExecutionPlan] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-
+  const [backendValidationResult, setBackendValidationResult] = useState(false);  
+  const [showErrorMessage, setShowErrorMessage] = useState(false);  
 
   const toggleExecutionPlan = () => {
     setShowExecutionPlan(!showExecutionPlan);
@@ -30,163 +33,84 @@ function Playground() {
 
   const parser = new Parser();
 
-  // const handleQueryValidation = () => {
-  //   try {
-  //     parser.astify(sqlQuery, opt);
-  //     setValidationResult(true);
-  //     setValidationError('');
-
-  //     // Envoyer la requête SQL analysée au backend
-  //     sendQueryToBackend(sqlQuery);
-  //   } catch (error) {
-  //     setValidationResult(false);
-  //     setValidationError(error.message);
-  //     window.alert('Validation Error: ' + error.message);
-  //   }
-  // };
-
   const handleQueryValidation = () => {
     try {
       parser.astify(sqlQuery, opt);
       setValidationResult(true);
       setValidationError('');
-  
-      // Clear the optimizedQuery state
       setOptimizedQuery('');
-  
-      // Envoyer la requête SQL analysée au backend
-      verifyQueryBackend(sqlQuery);
+      setShowErrorMessage(false);  
+
+       sendQueryToBackend(sqlQuery);
     } catch (error) {
       setValidationResult(false);
       setValidationError(error.message);
+      setShowErrorMessage(true); // Afficher le message d'erreur en cas d'échec de la validation
       window.alert('Validation Error: ' + error.message);
     }
   };
-    
 
-  // const sendQueryToBackend = (query) => {
-  //   setLoading(true); // Activer le chargement
-
-  //   fetch('http://127.0.0.1:5000/analyze-sql', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({ query })
-  //   })
-  //     .then(response => {
-  //       if (response.ok) {
-  //         return response.json();
-  //       } else {
-  //         throw new Error('Failed to send query to the backend');
-  //       }
-  //     })
-  //     .then(data => {
-  //       setOptimizedQuery(data.optimized_query);
-  //       console.log('Query successfully sent to the backend');
-  //     })
-  //     .catch(error => {
-  //       console.error('Error sending query to backend:', error);
-  //       window.alert('Error sending query to backend: ' + error.message);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false); // Désactiver le chargement une fois le traitement terminé
-  //     });
-  // };
-
-  async function verifyQueryBackend(query) {
-    // Make a POST request to your Flask backend with the SQL query
-    fetch('http://127.0.0.1:5000/api/validation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ query })
-    }) .then(response=>{
-      if (response.ok) {
-        // Handle successful response from the backend
-        console.log('Query is valid');
-      } else {
-        // Handle error response from the backend
-        throw new Error('false query');
-      }
-    
-    })      .catch(error => {
-      // Handle any errors that occur during the fetch operation
-      console.error('Error sending query to backend:', error);
-      window.alert('Error sending query to backend: ' + error.message);
-    });
-    }
-  const sendQueryToBackend = (query) => {
-    setLoading(true); // Activate loading
-
-    // Define the endpoints for analyze-sql and optimize-sql
+  const sendQueryToBackend = async (query) => {
+    setLoading(true); 
     const analyzeSqlEndpoint = 'http://127.0.0.1:5000/analyze_sql';
-    const optimizeSqlEndpoint = 'http://127.0.0.1:5000/optimise_query';
 
-    // Define the payload for the requests
     const requestData = { query };
 
-    // Send request to analyze-sql endpoint
-    fetch(analyzeSqlEndpoint, {
+    try {
+      const analyzeResponse = await fetch(analyzeSqlEndpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestData)
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Failed to analyze SQL query');
-        }
-    })
-    .then(data => {
-        // Handle response from analyze-sql endpoint
-        console.log('SQL query analysis result:', data);
-        if (data.status === 'success') {
-            // If the query is valid, send request to optimize-sql endpoint
-            setLoading(true); // Activate loading for optimization phase
-            fetch(optimizeSqlEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to optimize SQL query');
-                }
-            })
-            .then(data => {
-                // Handle response from optimize-sql endpoint
-                console.log('Optimized SQL query:', data.optimized_query);
-                setOptimizedQuery(data.optimized_query);
-            })
-            .catch(error => {
-                console.error('Error optimizing SQL query:', error);
-                setAlertMessage('Error optimizing SQL query: ' + error.message);
-            })
-            .finally(() => {
-                setLoading(false); // Deactivate loading for optimization phase
-            });
-        } else {
-            // Handle case where SQL query is invalid
-            setAlertMessage('Invalid SQL query: ' + data.message);
-            setLoading(false); // Deactivate loading for analysis phase
-        }
-    })
-    .catch(error => {
-        console.error('Error analyzing SQL query:', error);
-        setAlertMessage('Error analyzing SQL query: ' + error.message);
-        setLoading(false); // Deactivate loading for analysis phase
-    });
-};
+      });
 
+      if (!analyzeResponse.ok) {
+        throw new Error('Failed to analyze SQL query');
+      }
+
+      const analyzeData = await analyzeResponse.json();
+
+      console.log('SQL query analysis result:', analyzeData);
+
+      if (analyzeData.status === 'success') {
+        setBackendValidationResult(true); 
+        sendOptimizeRequest(requestData);
+      } else {
+        setValidationError('Invalid SQL query');
+        setBackendValidationResult(false);  
+      }
+    } catch (error) {
+      console.error('Error analyzing SQL query:', error);
+      setValidationError('Error analyzing SQL query');
+      setBackendValidationResult(false); 
+    } finally {
+      setLoading(false);  
+    }
+  };
+
+  const sendOptimizeRequest = async (query) => {
+    const optimizeSqlEndpoint = 'http://127.0.0.1:5000/optimise_query';
+
+    try {
+      const response = await fetch(optimizeSqlEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to optimize SQL query');
+      }
+
+      const data = await response.json();
+      setOptimizedQuery(data.optimized_query);
+    } catch (error) {
+      console.error('Error optimizing SQL query:', error);
+    }
+  };
 
   const getRandomImageName = () => {
     const imageNames = ['OIG4', 'OIG5', 'OIG6', 'OIG7'];
@@ -194,7 +118,6 @@ function Playground() {
     return imageNames[randomIndex];
   };
   
-  // Dans votre composant où vous définissez l'image de chargement
   const randomImageName = getRandomImageName();
   const loadingImageUrl = `public/${randomImageName}.jpg`;
 
@@ -206,7 +129,6 @@ function Playground() {
         </div>
         <br />
         
-
         <div className="bg-white shadow-lg rounded ashraf">
           <div className="flex flex-col h-full">
             <ResizablePanelGroup direction="horizontal" className="flex flex-grow">
@@ -222,19 +144,26 @@ function Playground() {
                   <br />
                   <Button onClick={handleQueryValidation}>Submit</Button>
 
-                
-            {/* Display alert message if there's a validation error */}
-            {validationResult === false && (
-              <Alert>
-                <RocketIcon className="h-4 w-4" />
-                <AlertTitle>Error!</AlertTitle>
-                <AlertDescription>{validationError}</AlertDescription>
-              </Alert>
-            )}
+                  {showErrorMessage && (
+                    <Alert variant="destructive" className = "mt-2">
+                    <AlertCircle className="h-4 w-4 "  />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription className= "flex flex-col items-center justify-center">
+                      Oops! It seems like there's a problem with your query. <br/>
+                      <Link to="/ChatBot" className="flex items-center font-semibold hover:text-gray-900 ">
+                        Let's try something else!
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.29227 0.048984C3.47033 -0.032338 3.67946 -0.00228214 3.8274 0.125891L12.8587 7.95026C13.0134 8.08432 13.0708 8.29916 13.0035 8.49251C12.9362 8.68586 12.7578 8.81866 12.5533 8.82768L9.21887 8.97474L11.1504 13.2187C11.2648 13.47 11.1538 13.7664 10.9026 13.8808L8.75024 14.8613C8.499 14.9758 8.20255 14.8649 8.08802 14.6137L6.15339 10.3703L3.86279 12.7855C3.72196 12.934 3.50487 12.9817 3.31479 12.9059C3.1247 12.8301 3 12.6461 3 12.4414V0.503792C3 0.308048 3.11422 0.130306 3.29227 0.048984ZM4 1.59852V11.1877L5.93799 9.14425C6.05238 9.02363 6.21924 8.96776 6.38319 8.99516C6.54715 9.02256 6.68677 9.12965 6.75573 9.2809L8.79056 13.7441L10.0332 13.178L8.00195 8.71497C7.93313 8.56376 7.94391 8.38824 8.03072 8.24659C8.11753 8.10494 8.26903 8.01566 8.435 8.00834L11.2549 7.88397L4 1.59852Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                      </Link>
+                    </AlertDescription>
+                                      
+                  </Alert>
+                  )}
 
-                  {validationResult === true && (
-                    <Alert>
-                      <RocketIcon className="h-4 w-4" />
+                  {validationResult === true && backendValidationResult === true && (
+                    <Alert  className = "mt-2">
+                      <RocketIcon className="h-4 w-4"   />
                       <AlertTitle>Success!</AlertTitle>
                       <AlertDescription>The SQL query is valid.</AlertDescription>
                     </Alert>

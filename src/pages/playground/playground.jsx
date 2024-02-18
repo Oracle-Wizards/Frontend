@@ -13,8 +13,8 @@ import Execution from "../../components/execution/execution";
 
 function Playground() {
   const opt = {
-    database: 'MySQL'
-  };
+    database: 'PostgreSQL' //   is the default database
+  }
   const [sqlQuery, setSqlQuery] = useState('');
   const [validationResult, setValidationResult] = useState(null);
   const [validationError, setValidationError] = useState('');
@@ -35,18 +35,40 @@ function Playground() {
       setValidationError('');
 
       // Envoyer la requête SQL analysée au backend
-      sendQueryToBackend(sqlQuery);
+      verifyQueryBackend(sqlQuery);
     } catch (error) {
       setValidationResult(false);
       setValidationError(error.message);
       window.alert('Validation Error: ' + error.message);
     }
   };
-
+  
+  async function verifyQueryBackend(query) {
+    // Make a POST request to your Flask backend with the SQL query
+    fetch('http://127.0.0.1:5000/api/validation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query })
+    }) .then(response=>{
+      if (response.ok) {
+        // Handle successful response from the backend
+        console.log('Query is valid');
+      } else {
+        // Handle error response from the backend
+        throw new Error('false query');
+      }
+    
+    })      .catch(error => {
+      // Handle any errors that occur during the fetch operation
+      console.error('Error sending query to backend:', error);
+      window.alert('Error sending query to backend: ' + error.message);
+    });
+    }
   const sendQueryToBackend = (query) => {
-    setLoading(true); // Activer le chargement
-
-    fetch('http://127.0.0.1:5000/analyze-sql', {
+    // Make a POST request to your Flask backend with the SQL query
+    fetch('http://127.0.0.1:5000/api/optimization', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -105,13 +127,15 @@ function Playground() {
                   <br />
                   <Button onClick={handleQueryValidation}>Submit</Button>
 
-                  {validationResult === false && (
-                    <Alert>
-                      <RocketIcon className="h-4 w-4" />
-                      <AlertTitle>Error!</AlertTitle>
-                      <AlertDescription>{validationError}</AlertDescription>
-                    </Alert>
-                  )}
+                
+            {/* Display alert message if there's a validation error */}
+            {validationResult === false && (
+              <Alert>
+                <RocketIcon className="h-4 w-4" />
+                <AlertTitle>Error!</AlertTitle>
+                <AlertDescription>{validationError}</AlertDescription>
+              </Alert>
+            )}
 
                   {validationResult === true && (
                     <Alert>

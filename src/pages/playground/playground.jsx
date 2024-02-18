@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import   { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Textarea } from '@/components/ui/textarea';

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Textarea } from '@/components/ui/textarea';
@@ -45,7 +45,7 @@ function Playground() {
     } catch (error) {
       setValidationResult(false);
       setValidationError(error.message);
-      setShowErrorMessage(true); // Afficher le message d'erreur en cas d'échec de la validation
+      // setShowErrorMessage(true);  
       window.alert('Validation Error: ' + error.message);
     }
   };

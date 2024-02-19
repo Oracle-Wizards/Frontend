@@ -45,8 +45,8 @@ function Playground() {
     } catch (error) {
       setValidationResult(false);
       setValidationError(error.message);
-      // setShowErrorMessage(true);  
-      window.alert('Validation Error: ' + error.message);
+      setShowErrorMessage(true); // Afficher le message d'erreur en cas d'échec de la validation
+      // window.alert('Validation Error: ' + error.message);
     }
   };
 
@@ -74,19 +74,27 @@ function Playground() {
       console.log('SQL query analysis result:', analyzeData);
 
       if (analyzeData.status === 'success') {
+        setLoading(true);  
+
         setBackendValidationResult(true); 
         sendOptimizeRequest(requestData);
       } else {
         setValidationError('Invalid SQL query');
-        setBackendValidationResult(false);  
+        setBackendValidationResult(false); 
+        setShowErrorMessage(true);
+        setLoading(false);
+
+         
+        
       }
     } catch (error) {
       console.error('Error analyzing SQL query:', error);
       setValidationError('Error analyzing SQL query');
       setBackendValidationResult(false); 
-    } finally {
       setLoading(false);  
-    }
+      setShowErrorMessage(true);
+
+    } 
   };
 
   const sendOptimizeRequest = async (query) => {
@@ -109,6 +117,9 @@ function Playground() {
       setOptimizedQuery(data.optimized_query);
     } catch (error) {
       console.error('Error optimizing SQL query:', error);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -137,8 +148,8 @@ function Playground() {
                   <span className="font-semibold text-xl">Original query</span>
                   <Textarea
                     spellcheck="false"
-                    className="mt-4 resize-none w-full flex-grow font-semibold bg-gray-100 text-base"
-                    placeholder="Type your text query"
+                    className="mt-4 resize-none w-full flex-grow bg-gray-100 font-semibold text-base"
+                    placeholder="Type your query"
                     value={sqlQuery}
                     onChange={(e) => setSqlQuery(e.target.value)}
                   />

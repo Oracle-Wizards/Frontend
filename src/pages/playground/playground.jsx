@@ -46,7 +46,7 @@ function Playground() {
       setValidationResult(false);
       setValidationError(error.message);
       setShowErrorMessage(true); // Afficher le message d'erreur en cas d'échec de la validation
-      window.alert('Validation Error: ' + error.message);
+      // window.alert('Validation Error: ' + error.message);
     }
   };
 
@@ -149,7 +149,7 @@ function Playground() {
                   <Textarea
                     spellcheck="false"
                     className="mt-4 resize-none w-full flex-grow bg-gray-100 font-semibold text-base"
-                    placeholder="Type your text query"
+                    placeholder="Type your query"
                     value={sqlQuery}
                     onChange={(e) => setSqlQuery(e.target.value)}
                   />
